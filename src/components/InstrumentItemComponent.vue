@@ -50,6 +50,10 @@
 import type { Constituent } from '../interfaces/constituens.interfaces';
 import { isPositive } from '../utils/colorText.formater';
 import { formaterNumerToPercert } from '../utils/percent.formater';
+import { useInstrumentStore } from '../stores/useInstrumentStore';
+
+const instrumentStore = useInstrumentStore()
+
 
 // Cada fila de la lista de instrumentos, la cual debe ser interactiva.
 const props = defineProps<{
@@ -58,6 +62,7 @@ const props = defineProps<{
 
 const handleClick = (shortName: string) => {
     console.log('clicked', shortName)
+    instrumentStore.setInstrument(shortName)
 }
 
 

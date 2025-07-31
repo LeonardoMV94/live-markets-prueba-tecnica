@@ -4,10 +4,13 @@
             <input type="radio" name="tabulacion" class="tab" aria-label="Resumen" />
 
             <input type="radio" name="tabulacion" class="tab" aria-label="Detalles" checked />
-            <div v-if="loading" class="tab-content skeleton w-full p-2 flex items-center justify-center" >
+            <div v-if="loading" class="tab-content skeleton p-2 flex items-center justify-center h-full w-full">
                 <IconLoading />
             </div>
-            <div v-else class="tab-content p-2" >
+            <div v-else-if="error" class="tab-content skeleton w-full p-2 flex items-center justify-center">
+                <p>No se encontró el instrumento</p>
+            </div>
+            <div v-else class="tab-content p-2">
                 <div class="flex flex-row justify-between">
                     <p>Cotizacion</p>
                     <p>{{ resumen?.data.price.askDatetime }}</p>
@@ -64,8 +67,8 @@
                         {{ formaterNumerToPercert(resumen?.data.price.pctRelCY ?? 0) }}
                     </p>
                 </div>
-                
-                
+
+
             </div>
         </div>
     </div>
@@ -76,7 +79,7 @@
 import { storeToRefs } from 'pinia';
 import { useInstrumentStore } from '../stores/useInstrumentStore';
 import { useResumenStore, type Instrument } from '../stores/resumenStore';
-import { onMounted } from 'vue';
+import { onMounted, watch } from 'vue';
 import { formaterNumerToPercert } from '../utils/percent.formater';
 import { isPositive } from '../utils/colorText.formater';
 import IconLoading from './icons/IconLoading.vue';
@@ -85,10 +88,15 @@ const instrumentStore = useInstrumentStore()
 const { instrument } = storeToRefs(instrumentStore)
 
 const resumenStore = useResumenStore()
-const { resumen, loading } = storeToRefs(resumenStore)
+const { resumen, loading, error } = storeToRefs(resumenStore)
 
 onMounted(() => {
     resumenStore.getResumen(instrument.value as Instrument)
+})
+
+watch(instrument, (newInstrument) => {
+    console.log("cambio instrumento", newInstrument)
+    resumenStore.getResumen(newInstrument as Instrument)
 })
 </script>
 

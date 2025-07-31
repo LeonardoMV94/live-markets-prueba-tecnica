@@ -1,5 +1,29 @@
 <template>
-    <div>
+    <div v-if="loading">
+        <div class="skeleton w-full h-full">
+            <div class="w-full max-w-8xl h-[300px]">
+                <div width="100%" height="100%" class="skeleton flex items-center justify-center w-full h-full" >
+                    <IconLoading />
+                </div>
+            </div>
+            <div class="flex w-full flex-row gap-2">
+                <button class="skeleton btn btn-black hover:bg-primary px-5">1D</button>
+                <button class="skeleton btn btn-black hover:bg-primary px-5">1S</button>
+                <button class="skeleton btn btn-black hover:bg-primary px-5">1M</button>
+                <button class="skeleton btn btn-black hover:bg-primary px-5">3M</button>
+                <button class="skeleton btn btn-black hover:bg-primary px-5">6M</button>
+                <button class="skeleton btn btn-black hover:bg-primary px-5">1Y</button>
+                <button class="skeleton btn btn-black hover:bg-primary px-5">5Y</button>
+                <button class="skeleton btn btn-black hover:bg-primary px-5 ml-4">
+                    <IconCalendar :size="4" />
+                </button>
+            </div>
+        </div>
+    </div>
+    <div v-else-if="error" class="skeleton w-full h-full">
+        <p>No se encontró el instrumento</p>
+    </div>
+    <div v-else>
         <div class="w-full max-w-8xl h-[300px]">
             <VueApexCharts type="area" width="100%" height="100%" :series="chartData" :options="options" />
         </div>
@@ -26,6 +50,7 @@ import VueApexCharts from "vue3-apexcharts";
 import IconCalendar from "./icons/IconCalendar.vue"
 import { useHistoryStore } from '../stores/historyStore'
 import type { Chart } from "../interfaces/history.interfaces";
+import IconLoading from "./icons/IconLoading.vue";
 
 const props = withDefaults(defineProps<{
     instrument: string
@@ -110,7 +135,7 @@ onMounted(async () => {
 })
 
 watchEffect(() => {
-    console.log(history.value?.data.chart)
+    console.log("cambio chart")
 })
 </script>
 

@@ -4,6 +4,10 @@
 import InstrumentItemComponent from './InstrumentItemComponent.vue';
 import type { Constituent } from '../interfaces/constituens.interfaces'
 import { BarsArrowDownIcon, ArrowsUpDownIcon } from '@heroicons/vue/24/outline'
+import { useConstituensStore } from '../stores/constituensStore';
+
+const constituentsStore = useConstituensStore()
+
 const props = defineProps<{ constituents: Constituent[] | null }>()
 //obtener data de constituents 
 
@@ -78,7 +82,22 @@ const props = defineProps<{ constituents: Constituent[] | null }>()
         </tr>
       </thead>
       <tbody>
-        <InstrumentItemComponent v-for="item in props.constituents || []" :key="item.shortName" :item="item" />
+        <div v-if="constituentsStore.loading">
+          <div class="skeleton w-full h-full">
+            <tr v-for="i in 8" :key="i">
+              <td class="skeleton w-full h-full">
+              </td>
+            </tr>
+          </div>
+        </div>
+        <div v-else-if="constituentsStore.error">
+          <div class="skeleton w-full h-full">
+            <p>No se encontró el instrumento</p>
+          </div>
+        </div>
+        <template v-else>
+          <InstrumentItemComponent v-for="item in props.constituents || []" :key="item.shortName" :item="item" />
+        </template>
       </tbody>
     </table>
   </div>

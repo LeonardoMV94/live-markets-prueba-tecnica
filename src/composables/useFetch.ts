@@ -5,7 +5,7 @@ import { ref } from 'vue'
  * @param timeout tiempo de espera en milisegundos simulado para la carga de datos
  * @returns data, error, loading, refetch
  */
-export function useFetch<T = unknown>(url: string, immediate = true, timeout = 20000) {
+export function useFetch<T = unknown>(url: string, immediate = true, timeout = 200) {
   const data = ref<T | null>(null)
   const error = ref<Error | null>(null)
   const loading = ref<boolean>(false)
