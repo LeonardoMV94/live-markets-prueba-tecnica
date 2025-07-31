@@ -8,7 +8,7 @@ export const useHistoryStore = defineStore('history', () => {
   const error = ref<Error | null>(null)
   const loading = ref(false)
 
-  const getHistory = async (instrument: string) => {
+  const getHistory = async (instrument: string = 'IPSA') => {
     loading.value = true
     error.value = null
 
@@ -17,7 +17,7 @@ export const useHistoryStore = defineStore('history', () => {
       error: fetchError,
       loading: fetchLoading,
       refetch
-    } = useFetch<HistoryResponse>(`/data/history/${instrument}.json`, false)
+    } = useFetch<HistoryResponse>(`/data/history/history-${instrument}.json`, false)
 
     await refetch()
 
@@ -30,6 +30,6 @@ export const useHistoryStore = defineStore('history', () => {
     history,
     error,
     loading,
-    getHistory
+    refetch: getHistory
   }
 })

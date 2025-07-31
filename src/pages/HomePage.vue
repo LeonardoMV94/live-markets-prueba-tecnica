@@ -1,9 +1,17 @@
 <template>
-    <div class="flex flex-col gap-8 p-8 bg-black">
+    <div class="flex flex-col gap-4 p-8 bg-black">
+        <div></div>
         <SearchBarComponent />
-        <HeaderComponent shortName="IPSA" countryName="Chile" :actualPrice="6474.37" :variation="variation"
-            :variationPoints="-51.01" />
-        <ChartComponent />
+
+        <div class="grid grid-cols-1 lg:grid-cols-5 gap-4">
+            <div class="lg:col-span-4 flex flex-col gap-4">
+                <HeaderComponent shortName="IPSA" countryName="Chile" :actualPrice="6474.37" :variation="variation"
+                    :variationPoints="-51.01" />
+                <ChartComponent class="" instrument="IPSA" />
+            </div>
+
+            <SummaryComponent class="lg:col-span-1 lg:mt-10" />
+        </div>
         <TabComponent />
         <div class="flex flex-col items-start justify-center">
             <p class="text-sm text-gray-500">* Ultimo precio. Monto Transado y Variacion daria con desfase de 15
@@ -19,6 +27,7 @@ import SearchBarComponent from "../components/SearchBarComponent.vue";
 import HeaderComponent from "../components/HeaderComponent.vue";
 import ChartComponent from "../components/ChartComponent.vue";
 import TabComponent from "../components/TabComponent.vue";
+import SummaryComponent from "../components/SummaryComponent.vue";
 import { ref } from "vue";
 
 const variation = ref(-1.74);

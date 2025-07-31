@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="w-full max-w-3xl h-[300px]">
+        <div class="w-full max-w-8xl h-[300px]">
             <VueApexCharts type="area" width="100%" height="100%" :series="chartData" :options="options" />
         </div>
         <div class="flex w-full flex-row gap-2">
@@ -20,16 +20,29 @@
 
 <script setup lang="ts">
 // Gráfico que muestra la evolución del índice seleccionado en diferentes periodos (1M, 3M, 6M, 1A).
+import { computed, onMounted, watchEffect } from "vue";
+import { storeToRefs } from "pinia";
 import VueApexCharts from "vue3-apexcharts";
-import { ref } from "vue";
-import IconCalendar from "./icons/IconCalendar.vue";
+import IconCalendar from "./icons/IconCalendar.vue"
+import { useHistoryStore } from '../stores/historyStore'
+import type { Chart } from "../interfaces/history.interfaces";
 
-const chartData = ref([
-    {
-        name: "Price",
-        data: [10, 22, 3, 4, 59, 60, 7, 8, 9, 10]
-    }
-]);
+const props = withDefaults(defineProps<{
+    instrument: string
+}>(), {
+    instrument: 'IPSA'
+})
+
+const historyStore = useHistoryStore()
+
+const { history, loading, error } = storeToRefs(historyStore)
+
+const chartData = computed(() => {
+    return [{
+        name: 'Price',
+        data: history.value?.data.chart.map((item: Chart) => item.lastPrice) || []
+    }]
+})
 
 const options: ApexCharts.ApexOptions = {
     chart: {
@@ -66,25 +79,39 @@ const options: ApexCharts.ApexOptions = {
     legend: {
         show: false
     },
+    xaxis: {
+        axisBorder: {
+            show: false
+        },
+        axisTicks: {
+            show: false
+        },
+        labels: {
+            show: false
+        }
+    },
     tooltip: {
         x: {
-            format: 'dd MMM HH:mm'
+            formatter: (value: number) => {
+                const date = new Date(value)
+                return date.toLocaleDateString('es-CL', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })
+            }
         },
         y: {
             formatter: (value: number) => `$${value.toLocaleString('es-CL', { minimumFractionDigits: 2 })}`
         },
         theme: 'dark'
     },
-    yaxis: {
-        labels: {
-            formatter: (value: number) => value.toLocaleString('en-US', { minimumFractionDigits: 2 }),
-            style: {
-                colors: '#ccc'
-            }
-        }
-    },
 
 }
+
+onMounted(async () => {
+    await historyStore.refetch(props.instrument)
+})
+
+watchEffect(() => {
+    console.log(history.value?.data.chart)
+})
 </script>
 
 <style scoped></style>

@@ -1,6 +1,6 @@
 <template>
-    <tr @click="handleClick(props.item.shortName)" class="cursor-pointer">
-        <td class="pr-10">
+    <tr @click="handleClick(props.item.shortName)" class="cursor-pointer hover:bg-gray-800">
+        <td class="pr-10 ">
             <div class="flex flex-row items-center justify-start">
                 <div class="pr-2">{{ props.item.shortName }}</div>
             </div>
@@ -48,6 +48,8 @@
 
 <script setup lang="ts">
 import type { Constituent } from '../interfaces/constituens.interfaces';
+import { isPositive } from '../utils/colorText.formater';
+import { formaterNumerToPercert } from '../utils/percent.formater';
 
 // Cada fila de la lista de instrumentos, la cual debe ser interactiva.
 const props = defineProps<{
@@ -58,26 +60,7 @@ const handleClick = (shortName: string) => {
     console.log('clicked', shortName)
 }
 
-const formaterNumerToPercert = (num: number) => {
-    const numFormated = num.toFixed(2)
-    if (num > 0) {
-        return '+' + numFormated + '%'
-    } else if (num < 0) {
-        return numFormated + '%'
-    } else {
-        return numFormated + '%'
-    }
-}
 
-const isPositive = (num: number) => {
-    if (num > 0) {
-        return 'text-green-500'
-    } else if (num < 0) {
-        return 'text-red-500'
-    } else {
-        return 'text-white'
-    }
-}
 </script>
 
 <style scoped></style>
