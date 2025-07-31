@@ -25,7 +25,7 @@ export const useResumenStore = defineStore("resumen", () => {
       error: fetchError,
       loading: fetchLoading,
       refetch,
-    } = useFetch<ResumenResponse>(`/data/resumen/${instrument}.json`);
+    } = useFetch<ResumenResponse>(`/data/resumen/${instrument}.json`,false);
 
     await refetch();
 

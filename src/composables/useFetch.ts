@@ -1,6 +1,6 @@
 import { ref } from 'vue'
 
-export function useFetch<T = unknown>(url: string) {
+export function useFetch<T = unknown>(url: string, immediate = true) {
   const data = ref<T | null>(null)
   const error = ref<Error | null>(null)
   const loading = ref<boolean>(false)
@@ -23,6 +23,8 @@ export function useFetch<T = unknown>(url: string) {
       loading.value = false
     }
   }
+
+  if (immediate) fetchData()
 
   return { data, error, loading, refetch: fetchData }
 }

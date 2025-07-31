@@ -17,7 +17,7 @@ export const useHistoryStore = defineStore('history', () => {
       error: fetchError,
       loading: fetchLoading,
       refetch
-    } = useFetch<HistoryResponse>(`/data/history/${instrument}.json`)
+    } = useFetch<HistoryResponse>(`/data/history/${instrument}.json`, false)
 
     await refetch()
 

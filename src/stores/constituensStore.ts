@@ -12,11 +12,11 @@ export const useConstituensStore = defineStore('constituens', () => {
     loading.value = true
     error.value = null
 
-    const { data, error: fetchError, loading: fetchLoading } =
-      useFetch<ConstituensResponse>('/data/constituyentes/constituensList.json')
+    const { data, error: fetchError, loading: fetchLoading, refetch } =
+      useFetch<ConstituensResponse>('/data/constituyentes/constituensList.json', false)
 
-    // await refetch()
-
+    await refetch()
+    console.log("store data constituens", data.value)
     constituens.value = data.value
     error.value = fetchError.value
     loading.value = fetchLoading.value
