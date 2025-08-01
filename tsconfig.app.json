@@ -9,7 +9,17 @@
     "noUnusedParameters": true,
     "erasableSyntaxOnly": true,
     "noFallthroughCasesInSwitch": true,
-    "noUncheckedSideEffectImports": true
+    "noUncheckedSideEffectImports": true,
+
+    "baseUrl": ".", 
+    "paths": {
+      "@/*": ["./src/*"],      
+      "@/components/*": ["./src/components/*"],
+      "@/composables/*": ["./src/composables/*"],
+      "@/interfaces/*": ["./src/interfaces/*"],
+      "@/stores/*": ["./src/stores/*"],
+      "@/utils/*": ["./src/utils/*"],
+    }
   },
   "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.vue"]
 }
