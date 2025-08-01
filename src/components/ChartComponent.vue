@@ -35,7 +35,7 @@
             <button class="btn btn-black hover:bg-primary px-5">6M</button>
             <button class="btn btn-black hover:bg-primary px-5">1Y</button>
             <button class="btn btn-black hover:bg-primary px-5">5Y</button>
-            <button class="btn btn-black hover:bg-primary px-5 ml-4">
+            <button class="btn btn-black hover:bg-primary px-5 ml-4">                
                 <IconCalendar :size="4" />
             </button>
         </div>
@@ -103,6 +103,14 @@ const options: ApexCharts.ApexOptions = {
     },
     legend: {
         show: false
+    },
+    yaxis:{
+        labels: {
+            show: true,
+            style: {
+                colors: ['#9b9b9b']
+            }
+        }
     },
     xaxis: {
         axisBorder: {

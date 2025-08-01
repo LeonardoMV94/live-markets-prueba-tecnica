@@ -1,17 +1,35 @@
 import { ref } from 'vue'
+
 /**
+ * @description composable para obtener los datos reactivos y tipados desde una api con metodo GET
  * @param url url de la api
  * @param immediate si se debe ejecutar inmediatamente
  * @param timeout tiempo de espera en milisegundos simulado para la carga de datos
  * @returns data, error, loading, refetch
  */
-export function useFetch<T = unknown>(url: string, immediate = true, timeout = 200) {
+export function useFetch<T = unknown>(url: string, immediate = true, timeout = 300) {
+  /**
+   * @description datos reactivos tipado con generico
+   * 
+   */
   const data = ref<T | null>(null)
+  /**
+   * @description error reactivos tipado con Error
+   */
   const error = ref<Error | null>(null)
+  /**
+   * @description loading reactivos tipado con booleano
+   */
   const loading = ref<boolean>(false)
 
   /**
-   * @description función para obtener los datos de la api
+   * @description funcion para obtener los datos desde una api con metodo GET
+   * @returns data, error, loading, refetch
+   * @example
+   * const { data, error, loading, refetch } = useFetch<Resumen>('https://api.example.com/data', false, 200)
+   * 
+   * await refetch()
+   * 
    */
   const fetchData = async () => {
     loading.value = true
@@ -32,7 +50,18 @@ export function useFetch<T = unknown>(url: string, immediate = true, timeout = 2
     }
   }
 
+  /**
+   * @description si se debe ejecutar inmediatamente
+   */
   if (immediate) fetchData()
 
-  return { data, error, loading, refetch: fetchData }
+  /**
+   * @description retorna los datos reactivos y tipados
+   * @returns data, error, loading, refetch
+   */
+  return { 
+    data, 
+    error, 
+    loading, 
+    refetch: fetchData }
 }

@@ -1,5 +1,5 @@
 <template>
-    <div class="tabs tabs-border flex flex-col gap-4">
+    <div class="tabs tabs-border tabs-xl flex flex-col gap-4">
         <div class="flex border-b border-gray-700  gap-4">
             <button class="tab" :class="{ 'tab-active': index === selectedIndex }" @click="handleClick(index)"
                 v-for="index in indices" :key="index">

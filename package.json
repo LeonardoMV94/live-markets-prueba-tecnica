@@ -16,6 +16,7 @@
     "vue3-apexcharts": "^1.8.0"
   },
   "devDependencies": {
+    "@pinia/testing": "^1.0.2",
     "@tailwindcss/vite": "^4.1.11",
     "@vitejs/plugin-vue": "^6.0.0",
     "@vue/tsconfig": "^0.7.0",
@@ -23,6 +24,7 @@
     "tailwindcss": "^4.1.11",
     "typescript": "~5.8.3",
     "vite": "^7.0.4",
+    "vitest": "^3.2.4",
     "vue-tsc": "^2.2.12"
   }
 }

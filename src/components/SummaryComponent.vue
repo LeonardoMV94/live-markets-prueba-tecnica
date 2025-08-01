@@ -1,9 +1,9 @@
 <template>
     <div class="flex w-full">
-        <div class="tabs tabs-border w-full">
-            <input type="radio" name="tabulacion" class="tab" aria-label="Resumen" />
+        <div class="tabs tabs-border tabs-xl w-full flex">
+            <input type="radio" name="tabulacion" class="tab flex-1 pb-2" aria-label="Resumen" />
 
-            <input type="radio" name="tabulacion" class="tab" aria-label="Detalles" checked />
+            <input type="radio" name="tabulacion" class="tab flex-1 pb-2" aria-label="Detalles" checked />
             <div v-if="loading" class="tab-content skeleton p-2 flex items-center justify-center h-full w-full">
                 <IconLoading />
             </div>

@@ -102,4 +102,3 @@ const props = defineProps<{ constituents: Constituent[] | null }>()
     </table>
   </div>
 </template>
-<style scoped></style>
