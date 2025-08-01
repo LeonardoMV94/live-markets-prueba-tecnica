@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from "vitest";
 import { setActivePinia, createPinia, storeToRefs } from "pinia";
-import { nextTick, ref, type Ref } from "vue";
+import { nextTick, ref } from "vue";
 import { useHistoryStore } from "../../../src/stores/historyStore";
 import type { HistoryResponse } from "../../../src/interfaces/history.interfaces";
 

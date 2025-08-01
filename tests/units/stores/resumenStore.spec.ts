@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, vi, afterEach } from "vitest";
 import { setActivePinia, createPinia, storeToRefs } from "pinia";
-import { nextTick, ref, type Ref } from "vue";
+import { nextTick, ref } from "vue";
 import { useResumenStore } from "../../../src/stores/resumenStore";
 import type { ResumenResponse } from "../../../src/interfaces/resumen.interfaces";
 
