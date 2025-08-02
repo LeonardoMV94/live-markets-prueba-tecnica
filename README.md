@@ -198,7 +198,7 @@ pnpm test:integration  # Solo tests de integración
 # Linting
 pnpm lint         # Ejecutar ESLint
 pnpm lint:fix     # Corregir errores de linting
-
+```
 ## 🚀 Deployment
 
 ### GitHub Pages
