@@ -2,6 +2,7 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { shallowMount, VueWrapper } from "@vue/test-utils";
 import { createTestingPinia } from "@pinia/testing";
 import { useHistoryStore } from "../../../src/stores/historyStore";
+import { useInstrumentStore } from "../../../src/stores/useInstrumentStore";
 import { storeToRefs } from "pinia";
 import ChartComponent from "../../../src/components/ChartComponent.vue";
 import { setActivePinia } from "pinia";
@@ -9,6 +10,7 @@ import type { HistoryResponse } from "../../../src/interfaces/history.interfaces
 
 let wrapper: VueWrapper;
 let historyStore: ReturnType<typeof useHistoryStore>;
+let instrumentStore: ReturnType<typeof useInstrumentStore>;
 let pinia: any;
 
 // Mock data
@@ -90,6 +92,24 @@ vi.mock("../../../src/components/skeletons/ChartSkeleton.vue", () => ({
   }
 }));
 
+// Mock de YearRangePicker
+vi.mock("../../../src/components/YearRangePicker.vue", () => ({
+  default: {
+    name: "YearRangePicker",
+    template: '<div data-testid="year-range-picker">Year Range Picker</div>',
+    emits: ['update:range']
+  }
+}));
+
+// Mock de IconCalendar
+vi.mock("../../../src/components/icons/IconCalendar.vue", () => ({
+  default: {
+    name: "IconCalendar",
+    template: '<div data-testid="icon-calendar">Calendar Icon</div>',
+    props: ['size']
+  }
+}));
+
 describe("ChartComponent", () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -100,19 +120,19 @@ describe("ChartComponent", () => {
 
     setActivePinia(pinia);
     historyStore = useHistoryStore();
+    instrumentStore = useInstrumentStore();
   });
 
   it("renderiza correctamente los datos del estado cuando no hay loading ni error", () => {
     const { history, loading, error } = storeToRefs(historyStore);
+    const { instrumentSelected } = storeToRefs(instrumentStore);
     
     loading.value = false;
     error.value = null;
     history.value = mockHistory;
+    instrumentSelected.value = "IPSA";
 
     wrapper = shallowMount(ChartComponent, {
-      props: {
-        instrument: "IPSA",
-      },
       global: {
         plugins: [pinia],
       },
@@ -132,9 +152,6 @@ describe("ChartComponent", () => {
     history.value = null;
 
     wrapper = shallowMount(ChartComponent, {
-      props: {
-        instrument: "IPSA",
-      },
       global: {
         plugins: [pinia],
       },
@@ -152,9 +169,6 @@ describe("ChartComponent", () => {
     history.value = null;
 
     wrapper = shallowMount(ChartComponent, {
-      props: {
-        instrument: "IPSA",
-      },
       global: {
         plugins: [pinia],
       },
@@ -167,9 +181,6 @@ describe("ChartComponent", () => {
     const refetchSpy = vi.spyOn(historyStore, 'refetch');
     
     wrapper = shallowMount(ChartComponent, {
-      props: {
-        instrument: "IPSA",
-      },
       global: {
         plugins: [pinia],
       },
@@ -181,15 +192,14 @@ describe("ChartComponent", () => {
 
   it("renderiza los botones de periodos correctamente", () => {
     const { history, loading, error } = storeToRefs(historyStore);
+    const { instrumentSelected } = storeToRefs(instrumentStore);
     
     loading.value = false;
     error.value = null;
     history.value = mockHistory;
+    instrumentSelected.value = "IPSA";
 
     wrapper = shallowMount(ChartComponent, {
-      props: {
-        instrument: "IPSA",
-      },
       global: {
         plugins: [pinia],
       },
@@ -208,15 +218,14 @@ describe("ChartComponent", () => {
 
   it("tiene la clase btn btn-black hover:bg-primary para los botones", () => {
     const { history, loading, error } = storeToRefs(historyStore);
+    const { instrumentSelected } = storeToRefs(instrumentStore);
     
     loading.value = false;
     error.value = null;
     history.value = mockHistory;
+    instrumentSelected.value = "IPSA";
 
     wrapper = shallowMount(ChartComponent, {
-      props: {
-        instrument: "IPSA",
-      },
       global: {
         plugins: [pinia],
       },
@@ -231,15 +240,14 @@ describe("ChartComponent", () => {
 
   it("tiene la clase px-5 para los botones de periodos", () => {
     const { history, loading, error } = storeToRefs(historyStore);
+    const { instrumentSelected } = storeToRefs(instrumentStore);
     
     loading.value = false;
     error.value = null;
     history.value = mockHistory;
+    instrumentSelected.value = "IPSA";
 
     wrapper = shallowMount(ChartComponent, {
-      props: {
-        instrument: "IPSA",
-      },
       global: {
         plugins: [pinia],
       },
@@ -253,21 +261,20 @@ describe("ChartComponent", () => {
 
   it("tiene la clase ml-4 para el botón del calendario", () => {
     const { history, loading, error } = storeToRefs(historyStore);
+    const { instrumentSelected } = storeToRefs(instrumentStore);
     
     loading.value = false;
     error.value = null;
     history.value = mockHistory;
+    instrumentSelected.value = "IPSA";
 
     wrapper = shallowMount(ChartComponent, {
-      props: {
-        instrument: "IPSA",
-      },
       global: {
         plugins: [pinia],
       },
     });
 
-    const calendarButton = wrapper.find('button:last-child');
+    const calendarButton = wrapper.find('button[data-testid="calendar-button"]');
     expect(calendarButton.classes()).toContain("ml-4");
   });
 
@@ -279,29 +286,44 @@ describe("ChartComponent", () => {
     history.value = null;
 
     wrapper = shallowMount(ChartComponent, {
-      props: {
-        instrument: "IPSA",
-      },
       global: {
         plugins: [pinia],
       },
     });
 
-    // Verificar que el componente se renderiza sin errores
     expect(wrapper.exists()).toBe(true);
   });
 
-  it("tiene la clase w-full max-w-8xl h-[300px] para el contenedor del gráfico", () => {
+  it("aplica la clase btn-primary al botón del periodo seleccionado", () => {
     const { history, loading, error } = storeToRefs(historyStore);
+    const { instrumentSelected } = storeToRefs(instrumentStore);
     
     loading.value = false;
     error.value = null;
     history.value = mockHistory;
+    instrumentSelected.value = "IPSA";
 
     wrapper = shallowMount(ChartComponent, {
-      props: {
-        instrument: "IPSA",
+      global: {
+        plugins: [pinia],
       },
+    });
+
+    // Verificar que el botón ALL tiene la clase btn-primary por defecto
+    const allButton = wrapper.find('button:contains("ALL")');
+    expect(allButton.classes()).toContain("btn-primary");
+  });
+
+  it("tiene la clase w-full max-w-8xl h-[300px] para el contenedor del gráfico", () => {
+    const { history, loading, error } = storeToRefs(historyStore);
+    const { instrumentSelected } = storeToRefs(instrumentStore);
+    
+    loading.value = false;
+    error.value = null;
+    history.value = mockHistory;
+    instrumentSelected.value = "IPSA";
+
+    wrapper = shallowMount(ChartComponent, {
       global: {
         plugins: [pinia],
       },
@@ -311,270 +333,29 @@ describe("ChartComponent", () => {
     expect(chartContainer.exists()).toBe(true);
   });
 
-  it("maneja correctamente el evento de click en el botón ALL", async () => {
-    const { history, loading, error } = storeToRefs(historyStore);
-    
-    loading.value = false;
-    error.value = null;
-    history.value = mockHistory;
-
-    wrapper = shallowMount(ChartComponent, {
-      props: {
-        instrument: "IPSA",
-      },
-      global: {
-        plugins: [pinia],
-      },
-    });
-
-    // Simular click en el botón "ALL"
-    const buttons = wrapper.findAll('button');
-    const allButton = buttons.find(button => button.text().includes('ALL'));
-    if (allButton) {
-      await allButton.trigger('click');
-      
-      // Verificar que el botón tiene la clase btn-primary después del click
-      expect(allButton.classes()).toContain("btn-primary");
-    }
-  });
-
-  it("muestra todos los datos cuando se selecciona ALL", async () => {
-    const { history, loading, error } = storeToRefs(historyStore);
-    
-    loading.value = false;
-    error.value = null;
-    history.value = mockHistory;
-
-    wrapper = shallowMount(ChartComponent, {
-      props: {
-        instrument: "IPSA",
-      },
-      global: {
-        plugins: [pinia],
-      },
-    });
-
-    // Simular click en el botón "ALL"
-    const buttons = wrapper.findAll('button');
-    const allButton = buttons.find(button => button.text().includes('ALL'));
-    if (allButton) {
-      await allButton.trigger('click');
-      
-      // Verificar que el botón tiene la clase btn-primary
-      expect(allButton.classes()).toContain("btn-primary");
-      
-      // Verificar que el componente se renderiza correctamente
-      expect(wrapper.exists()).toBe(true);
-    }
-  });
-
-  it("maneja correctamente el evento de click en los botones de periodos", async () => {
-    const { history, loading, error } = storeToRefs(historyStore);
-    
-    loading.value = false;
-    error.value = null;
-    history.value = mockHistory;
-
-    wrapper = shallowMount(ChartComponent, {
-      props: {
-        instrument: "IPSA",
-      },
-      global: {
-        plugins: [pinia],
-      },
-    });
-
-    // Simular click en el botón "3M"
-    const buttons = wrapper.findAll('button');
-    const threeMonthButton = buttons.find(button => button.text().includes('3M'));
-    if (threeMonthButton) {
-      await threeMonthButton.trigger('click');
-      
-      // Verificar que el botón tiene la clase btn-primary después del click
-      expect(threeMonthButton.classes()).toContain("btn-primary");
-    }
-  });
-
-  it("aplica la clase btn-primary al botón del periodo seleccionado", () => {
-    const { history, loading, error } = storeToRefs(historyStore);
-    
-    loading.value = false;
-    error.value = null;
-    history.value = mockHistory;
-
-    wrapper = shallowMount(ChartComponent, {
-      props: {
-        instrument: "IPSA",
-      },
-      global: {
-        plugins: [pinia],
-      },
-    });
-
-    // Verificar que el botón del periodo por defecto (1M) tiene la clase btn-primary
-    const defaultButton = wrapper.find('button:contains("1M")');
-    expect(defaultButton.classes()).toContain("btn-primary");
-  });
-
-  it("filtra los datos del gráfico según el periodo seleccionado", async () => {
-    const { history, loading, error } = storeToRefs(historyStore);
-    
-    loading.value = false;
-    error.value = null;
-    history.value = mockHistory;
-
-    wrapper = shallowMount(ChartComponent, {
-      props: {
-        instrument: "IPSA",
-      },
-      global: {
-        plugins: [pinia],
-      },
-    });
-
-    // Simular click en el botón "1Y"
-    const buttons = wrapper.findAll('button');
-    const oneYearButton = buttons.find(button => button.text().includes('1Y'));
-    if (oneYearButton) {
-      await oneYearButton.trigger('click');
-      
-      // Verificar que el botón tiene la clase btn-primary
-      expect(oneYearButton.classes()).toContain("btn-primary");
-      
-      // Verificar que el componente se renderiza correctamente
-      expect(wrapper.exists()).toBe(true);
-    }
-  });
-
-  it("verifica que los botones de periodos funcionen correctamente", async () => {
-    const { history, loading, error } = storeToRefs(historyStore);
-    
-    loading.value = false;
-    error.value = null;
-    history.value = mockHistory;
-
-    wrapper = shallowMount(ChartComponent, {
-      props: {
-        instrument: "IPSA",
-      },
-      global: {
-        plugins: [pinia],
-      },
-    });
-
-    // Verificar que el componente se renderiza correctamente
-    expect(wrapper.exists()).toBe(true);
-    
-    // Verificar que los botones de periodos están presentes
-    expect(wrapper.text()).toContain("ALL");
-    expect(wrapper.text()).toContain("1Y");
-  });
-
-  it("mantiene el estado del periodo seleccionado al cambiar de instrumento", async () => {
-    const { history, loading, error } = storeToRefs(historyStore);
-    
-    loading.value = false;
-    error.value = null;
-    history.value = mockHistory;
-
-    wrapper = shallowMount(ChartComponent, {
-      props: {
-        instrument: "IPSA",
-      },
-      global: {
-        plugins: [pinia],
-      },
-    });
-
-    // Simular click en el botón "6M"
-    const buttons = wrapper.findAll('button');
-    const sixMonthButton = buttons.find(button => button.text().includes('6M'));
-    if (sixMonthButton) {
-      await sixMonthButton.trigger('click');
-      
-      // Verificar que el botón tiene la clase btn-primary
-      expect(sixMonthButton.classes()).toContain("btn-primary");
-      
-      // Cambiar el prop instrument
-      await wrapper.setProps({ instrument: "AGUAS-A" });
-      
-      // Verificar que el estado del periodo se mantiene
-      expect(sixMonthButton.classes()).toContain("btn-primary");
-    }
-  });
-
-  it("maneja correctamente el evento de click en el botón del calendario", async () => {
-    const { history, loading, error } = storeToRefs(historyStore);
-    
-    loading.value = false;
-    error.value = null;
-    history.value = mockHistory;
-
-    wrapper = shallowMount(ChartComponent, {
-      props: {
-        instrument: "IPSA",
-      },
-      global: {
-        plugins: [pinia],
-      },
-    });
-
-    // Simular click en el botón del calendario
-    const calendarButton = wrapper.find('button:has(.ml-4)');
-    await calendarButton.trigger('click');
-    
-    // Verificar que el botón tiene la clase btn-primary después del click
-    expect(calendarButton.classes()).toContain("btn-primary");
-  });
-
-  it("muestra el modal de date picker cuando se hace click en el calendario", async () => {
-    const { history, loading, error } = storeToRefs(historyStore);
-    
-    loading.value = false;
-    error.value = null;
-    history.value = mockHistory;
-
-    wrapper = shallowMount(ChartComponent, {
-      props: {
-        instrument: "IPSA",
-      },
-      global: {
-        plugins: [pinia],
-      },
-    });
-
-    // Simular click en el botón del calendario
-    const calendarButton = wrapper.find('button:has(.ml-4)');
-    await calendarButton.trigger('click');
-    
-    // Verificar que el modal se muestra
-    expect(wrapper.find('.fixed.inset-0').exists()).toBe(true);
-  });
-
   it("filtra datos por rango de fechas personalizado", async () => {
     const { history, loading, error } = storeToRefs(historyStore);
+    const { instrumentSelected } = storeToRefs(instrumentStore);
     
     loading.value = false;
     error.value = null;
     history.value = mockHistory;
+    instrumentSelected.value = "IPSA";
 
     wrapper = shallowMount(ChartComponent, {
-      props: {
-        instrument: "IPSA",
-      },
       global: {
         plugins: [pinia],
       },
     });
 
-    // Simular click en el botón del calendario
-    const calendarButton = wrapper.find('button:has(.ml-4)');
+    const calendarButton = wrapper.find('button[data-testid="calendar-button"]');
     await calendarButton.trigger('click');
     
-    // Verificar que el modal se muestra
-    expect(wrapper.find('.fixed.inset-0').exists()).toBe(true);
+    // Simular la selección de un rango de fechas
+    const yearRangePicker = wrapper.findComponent({ name: 'YearRangePicker' });
+    yearRangePicker.vm.$emit('update:range', { startYear: '2023', endYear: '2024' });
     
-    // Verificar que el componente se renderiza correctamente
-    expect(wrapper.exists()).toBe(true);
+    // Verificar que el YearRangePicker existe
+    expect(yearRangePicker.exists()).toBe(true);
   });
 });

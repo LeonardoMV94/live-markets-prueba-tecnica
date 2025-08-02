@@ -58,23 +58,20 @@
 
 <script setup lang="ts">
 // Gráfico que muestra la evolución del índice seleccionado en diferentes periodos (1M, 3M, 6M, 1A).
-import { computed, onMounted, ref } from "vue";
+import { computed, onMounted, ref, watchEffect } from "vue";
 import { storeToRefs } from "pinia";
 import VueApexCharts from "vue3-apexcharts";
 import IconCalendar from "./icons/IconCalendar.vue"
 import { useHistoryStore } from '../stores/historyStore'
+import { useInstrumentStore } from '../stores/useInstrumentStore'
 import type { Chart } from "../interfaces/history.interfaces";
 import ChartSkeleton from "./skeletons/ChartSkeleton.vue";
 import YearRangePicker from "./YearRangePicker.vue";
-import { watch } from "fs";
-
-const props = withDefaults(defineProps<{
-    instrument: string
-}>(), {
-    instrument: 'IPSA'
-})
 
 const historyStore = useHistoryStore()
+const instrumentStore = useInstrumentStore()
+
+const { instrumentSelected } = storeToRefs(instrumentStore)
 
 const { history, loading, error } = storeToRefs(historyStore)
 
@@ -220,6 +217,13 @@ const options: ApexCharts.ApexOptions = {
 }
 
 onMounted(async () => {
-    await historyStore.refetch(props.instrument)
+    await historyStore.refetch(instrumentSelected.value)
+})
+
+// Observar cambios en el instrumento seleccionado
+watchEffect(async () => {
+    if (instrumentSelected.value) {
+        await historyStore.refetch(instrumentSelected.value)
+    }
 })
 </script>

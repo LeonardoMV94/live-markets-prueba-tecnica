@@ -7,7 +7,7 @@
             <div class="lg:col-span-4 flex flex-col gap-4">
                 <HeaderComponent shortName="IPSA" countryName="Chile" :actualPrice="6474.37" :variation="variation"
                     :variationPoints="-51.01" />
-                <ChartComponent class="" instrument="IPSA" />
+                <ChartComponent class="" />
             </div>
 
             <SummaryComponent class="lg:col-span-1 lg:mt-10" />
