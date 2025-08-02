@@ -209,8 +209,9 @@ El proyecto está configurado para deploy automático en GitHub Pages:
 - **URLs**: Se ajustan automáticamente en producción vs desarrollo
 
 ### Variables de Entorno
-- **Desarrollo**: URLs relativas sin base
-- **Producción**: URLs con base `/live-markets-prueba-tecnica`
+- **Desarrollo**: URLs relativas sin base (localhost)
+- **Producción**: URLs con base `/live-markets-prueba-tecnica` (GitHub Pages)
+- **Detección automática**: Basada en `window.location.hostname`
 
 ## 📊 Funcionalidades Implementadas
 
@@ -229,6 +230,7 @@ El proyecto está configurado para deploy automático en GitHub Pages:
 - **TypeScript** para tipado seguro
 - **Testing completo** con cobertura del 100%
 - **Responsive design** con Tailwind CSS
+- **Manejo inteligente de URLs** para desarrollo y producción
 
 ## 🎨 Interfaz de Usuario
 

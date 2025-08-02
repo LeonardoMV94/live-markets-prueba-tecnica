@@ -9,7 +9,7 @@ import { ref } from 'vue'
  */
 export function useFetch<T = unknown>(url: string, immediate = true, timeout = 300) {
   // Determinar si estamos en producción (GitHub Pages)
-  const isProduction = import.meta.env.PROD
+  const isProduction = typeof window !== 'undefined' && window.location.hostname !== 'localhost'
   const baseUrl = isProduction ? '/live-markets-prueba-tecnica' : ''
   
   // Construir la URL completa
