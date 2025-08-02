@@ -69,9 +69,9 @@ describe("useConstituensStore", () => {
 
   it("should call refetch and update data", async () => {
     const store = useConstituensStore();
-    const { constituens } = storeToRefs(store);
+    const { constituens, data } = storeToRefs(store);
 
-    expect(constituens.value).toBeNull(); // comprobar que el valor inicial es null
+    expect(data.value).toBeNull(); // comprobar que el valor inicial es null
     
     await store.getConstituens(); // Ejecutamos el fetch (refetch) async
     vi.advanceTimersByTime(101); // avanza el tiempo simulado
@@ -82,12 +82,35 @@ describe("useConstituensStore", () => {
     expect(constituens.value).toBeDefined(); // esperamos que constituens tenga datos
 
     // comprobar que constituens tiene datos
-    expect(constituens.value?.data.constituents.length).toBe(1);
-    expect(constituens.value?.data.info.name).toBe("IPSA");
+    expect(constituens.value?.length).toBe(1);
+    expect(data.value?.data.info.name).toBe("IPSA");
 
     // comprobar que error y loading son null
     expect(error.value).toBeNull();
     expect(loading.value).toBe(false);
+  });
+
+  it("should filter constituents based on searchTerm", async () => {
+    const store = useConstituensStore();
+
+    store.getConstituens();
+    vi.advanceTimersByTime(101);
+    await nextTick();
+
+    // No hay filtro aún
+    expect(store.constituens.length).toBe(1);
+
+    // Filtrar por algo que no coincide
+    store.setSearchTerm("BANCO");
+    await nextTick();
+
+    expect(store.constituens.length).toBe(0);
+
+    // Filtrar por coincidencia parcial
+    store.setSearchTerm("AGUAS");
+    await nextTick();
+
+    expect(store.constituens.length).toBe(1);
   });
 
   //limpiar mocks y tiempos

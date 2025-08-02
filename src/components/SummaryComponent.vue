@@ -78,25 +78,25 @@
 // Muestra el detalle de la cotización y otros datos relevantes.
 import { storeToRefs } from 'pinia';
 import { useInstrumentStore } from '../stores/useInstrumentStore';
-import { useResumenStore, type Instrument } from '../stores/resumenStore';
+import { useResumenStore } from '../stores/resumenStore';
 import { onMounted, watch } from 'vue';
 import { formaterNumerToPercert } from '../utils/percent.formater';
 import { isPositive } from '../utils/colorText.formater';
 import IconLoading from './icons/IconLoading.vue';
 
 const instrumentStore = useInstrumentStore()
-const { instrument } = storeToRefs(instrumentStore)
+const { instrumentSelected } = storeToRefs(instrumentStore)
 
 const resumenStore = useResumenStore()
 const { resumen, loading, error } = storeToRefs(resumenStore)
 
 onMounted(() => {
-    resumenStore.getResumen(instrument.value as Instrument)
+   resumenStore.getResumen()
 })
 
-watch(instrument, (newInstrument) => {
+watch(instrumentSelected, (newInstrument) => {
     console.log("cambio instrumento", newInstrument)
-    resumenStore.getResumen(newInstrument as Instrument)
+    resumenStore.getResumen(newInstrument)
 })
 </script>
 

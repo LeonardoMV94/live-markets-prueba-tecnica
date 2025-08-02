@@ -1,15 +1,15 @@
-import { defineStore } from 'pinia'
 import { ref } from 'vue'
+import { defineStore } from 'pinia'
 
 export const useInstrumentStore = defineStore('instrument', () => {
-  const instrument = ref('IPSA')
+  const instrumentSelected = ref('IPSA')
 
   function setInstrument(newInstrument: string = 'IPSA') {
-    instrument.value = newInstrument
+    instrumentSelected.value = newInstrument
   }
 
   return {
-    instrument,
+    instrumentSelected,
     setInstrument,
   }
 })

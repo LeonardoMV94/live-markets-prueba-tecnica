@@ -12,18 +12,35 @@ export const useHistoryStore = defineStore('history', () => {
     loading.value = true
     error.value = null
 
-    const {
-      data,
-      error: fetchError,
-      loading: fetchLoading,
-      refetch
-    } = useFetch<HistoryResponse>(`/data/history/history-${instrument}.json`, false)
+    try {
+      const {
+        data,
+        error: fetchError,
+        refetch
+      } = useFetch<HistoryResponse>(
+        `/data/history/history-${instrument}.json`,
+        false 
+      )
 
-    await refetch()
+      await refetch()
 
-    history.value = data.value
-    error.value = fetchError.value
-    loading.value = fetchLoading.value
+      if (fetchError.value) {
+        throw fetchError.value
+      }
+
+      if (!data.value) {
+        throw new Error(`No se pudo obtener el historial para el instrumento ${instrument}.`)
+      }
+
+      history.value = data.value
+    } catch (err) {
+      error.value = err instanceof Error
+        ? err
+        : new Error('Ocurrió un error inesperado al obtener el historial.')
+      history.value = null
+    } finally {
+      loading.value = false
+    }
   }
 
   return {

@@ -61,7 +61,6 @@ const props = defineProps<{
 }>()
 
 const handleClick = (shortName: string) => {
-    console.log('clicked', shortName)
     instrumentStore.setInstrument(shortName)
 }
 

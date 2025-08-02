@@ -34,11 +34,11 @@ import { storeToRefs } from 'pinia';
 import { useInstrumentStore } from '../stores/useInstrumentStore';
 
 const instrumentStore = useInstrumentStore()
-const { instrument } = storeToRefs(instrumentStore)
+const { instrumentSelected } = storeToRefs(instrumentStore)
 
 // Permite cambiar entre diferentes índices (IPSA, IGPA, NASDAQ, etc.).
 const indices = ['IPSA', 'IGPA', 'NASDAQ', 'Dow Jones', 'SP/BVL']
-const selectedIndex = ref(instrument)
+const selectedIndex = ref(instrumentSelected)
 
 const handleClick = (index: string) => {
     instrumentStore.setInstrument(index)
@@ -48,7 +48,7 @@ const handleClick = (index: string) => {
 const store = useConstituensStore()
 const { constituens, loading , error} = storeToRefs(store)
 
-const constituents = computed(() => constituens?.value?.data?.constituents || [])
+const constituents = computed(() => constituens.value || [])
 
 const half = computed(() => Math.ceil(constituents.value.length / 2))
 const firstHalf = computed(() => constituents.value.slice(0, half.value))
