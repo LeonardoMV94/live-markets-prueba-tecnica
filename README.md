@@ -128,6 +128,78 @@ tests/
 - **DaisyUI** - Componentes CSS
 - **ApexCharts** - Gráficos interactivos
 
+## 🛠️ Instalación y Configuración
+
+### Prerrequisitos
+- Node.js (versión 18 o superior)
+- pnpm (recomendado) o npm
+
+### Instalación de Dependencias
+```bash
+# Instalar dependencias del proyecto
+pnpm install
+```
+
+### Desarrollo
+```bash
+# Iniciar servidor de desarrollo
+pnpm dev
+
+# El proyecto estará disponible en http://localhost:5173
+```
+
+### Build de Producción
+```bash
+# Generar build optimizado para producción
+pnpm build
+
+# Los archivos se generarán en la carpeta dist/
+```
+
+### Testing
+```bash
+# Ejecutar todos los tests
+pnpm test
+
+# Ejecutar tests en modo watch
+pnpm test:watch
+
+# Ejecutar tests unitarios específicos
+pnpm test:unit
+
+# Ejecutar tests de integración
+pnpm test:integration
+```
+
+### Cobertura de Tests
+```bash
+# Generar reporte de cobertura
+pnpm test --coverage
+
+# Generar reporte HTML de cobertura
+pnpm test --coverage --reporter=html
+
+# Ver reporte HTML (después de generarlo)
+npx vite preview --outDir html
+```
+
+### Scripts Disponibles
+```bash
+# Desarrollo
+pnpm dev          # Servidor de desarrollo
+pnpm build        # Build de producción
+pnpm preview      # Preview del build
+
+# Testing
+pnpm test         # Ejecutar todos los tests
+pnpm test:unit    # Solo tests unitarios
+pnpm test:integration  # Solo tests de integración
+
+# Linting
+pnpm lint         # Ejecutar ESLint
+pnpm lint:fix     # Corregir errores de linting
+```
+
 ## 📊 Funcionalidades Implementadas
 
 ### Componentes Principales
