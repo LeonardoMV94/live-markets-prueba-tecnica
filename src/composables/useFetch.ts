@@ -8,6 +8,12 @@ import { ref } from 'vue'
  * @returns data, error, loading, refetch
  */
 export function useFetch<T = unknown>(url: string, immediate = true, timeout = 300) {
+  // Determinar si estamos en producción (GitHub Pages)
+  const isProduction = import.meta.env.PROD
+  const baseUrl = isProduction ? '/live-markets-prueba-tecnica' : ''
+  
+  // Construir la URL completa
+  const fullUrl = `${baseUrl}${url}`
   /**
    * @description datos reactivos tipado con generico
    * 
@@ -36,7 +42,7 @@ export function useFetch<T = unknown>(url: string, immediate = true, timeout = 3
     error.value = null
 
     try {
-      const response = await fetch(url)
+      const response = await fetch(fullUrl)
       if (!response.ok) {
         throw new Error(`Error: ${response.status} ${response.statusText}`)
       }

@@ -76,7 +76,7 @@ src/
 │   ├── useConstituensStore.ts
 │   └── useResumenStore.ts
 ├── composables/        # Lógica reutilizable
-│   ├── useFetch.ts
+│   ├── useFetch.ts     # Composable para fetch con manejo de URLs en prod/dev y parametro timeout simulado
 │   └── useGetColor.ts
 ├── utils/              # Utilidades
 │   ├── priceFormater.ts
@@ -198,7 +198,19 @@ pnpm test:integration  # Solo tests de integración
 # Linting
 pnpm lint         # Ejecutar ESLint
 pnpm lint:fix     # Corregir errores de linting
-```
+
+## 🚀 Deployment
+
+### GitHub Pages
+El proyecto está configurado para deploy automático en GitHub Pages:
+
+- **Base URL**: `/live-markets-prueba-tecnica/`
+- **Configuración**: Automática en `vite.config.ts`
+- **URLs**: Se ajustan automáticamente en producción vs desarrollo
+
+### Variables de Entorno
+- **Desarrollo**: URLs relativas sin base
+- **Producción**: URLs con base `/live-markets-prueba-tecnica`
 
 ## 📊 Funcionalidades Implementadas
 
