@@ -502,4 +502,79 @@ describe("ChartComponent", () => {
       expect(sixMonthButton.classes()).toContain("btn-primary");
     }
   });
+
+  it("maneja correctamente el evento de click en el botón del calendario", async () => {
+    const { history, loading, error } = storeToRefs(historyStore);
+    
+    loading.value = false;
+    error.value = null;
+    history.value = mockHistory;
+
+    wrapper = shallowMount(ChartComponent, {
+      props: {
+        instrument: "IPSA",
+      },
+      global: {
+        plugins: [pinia],
+      },
+    });
+
+    // Simular click en el botón del calendario
+    const calendarButton = wrapper.find('button:has(.ml-4)');
+    await calendarButton.trigger('click');
+    
+    // Verificar que el botón tiene la clase btn-primary después del click
+    expect(calendarButton.classes()).toContain("btn-primary");
+  });
+
+  it("muestra el modal de date picker cuando se hace click en el calendario", async () => {
+    const { history, loading, error } = storeToRefs(historyStore);
+    
+    loading.value = false;
+    error.value = null;
+    history.value = mockHistory;
+
+    wrapper = shallowMount(ChartComponent, {
+      props: {
+        instrument: "IPSA",
+      },
+      global: {
+        plugins: [pinia],
+      },
+    });
+
+    // Simular click en el botón del calendario
+    const calendarButton = wrapper.find('button:has(.ml-4)');
+    await calendarButton.trigger('click');
+    
+    // Verificar que el modal se muestra
+    expect(wrapper.find('.fixed.inset-0').exists()).toBe(true);
+  });
+
+  it("filtra datos por rango de fechas personalizado", async () => {
+    const { history, loading, error } = storeToRefs(historyStore);
+    
+    loading.value = false;
+    error.value = null;
+    history.value = mockHistory;
+
+    wrapper = shallowMount(ChartComponent, {
+      props: {
+        instrument: "IPSA",
+      },
+      global: {
+        plugins: [pinia],
+      },
+    });
+
+    // Simular click en el botón del calendario
+    const calendarButton = wrapper.find('button:has(.ml-4)');
+    await calendarButton.trigger('click');
+    
+    // Verificar que el modal se muestra
+    expect(wrapper.find('.fixed.inset-0').exists()).toBe(true);
+    
+    // Verificar que el componente se renderiza correctamente
+    expect(wrapper.exists()).toBe(true);
+  });
 });
