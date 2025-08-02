@@ -11,7 +11,7 @@ export default defineConfig({
     tsconfigPaths(),
   ],
   build:{
-    outDir: "docs",
+    // outDir: "docs",
   },
   resolve: {
     alias: {
